@@ -15,6 +15,9 @@ public class CheatActivity extends AppCompatActivity {
 
     private boolean mAnswerIsTrue;
 
+    public static final String KEY_CHEATED = "cheated";
+    private boolean mHasCheated;
+
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
 
@@ -33,6 +36,12 @@ public class CheatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
 
+        // if prev saved instance, set mHasCheated
+        if (savedInstanceState != null) {
+            mHasCheated = savedInstanceState.getBoolean(KEY_CHEATED, false);
+            setAnswerShownResult(mHasCheated);
+        }
+
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
@@ -48,6 +57,7 @@ public class CheatActivity extends AppCompatActivity {
                     mAnswerTextView.setText(R.string.false_button);
                 }
                 setAnswerShownResult(true);
+                mHasCheated = true;
             }
         });
     }
@@ -56,5 +66,12 @@ public class CheatActivity extends AppCompatActivity {
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
         setResult(RESULT_OK, data);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // on saveInstance, keep track of if the user has cheated
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(KEY_CHEATED, mHasCheated);
     }
 }
