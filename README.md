@@ -1,1 +1,1 @@
-GeoQuiz chapters 1-5
+Big Nerd Ranch first app for CS 496
