@@ -15,6 +15,7 @@ public class QuizActivity extends AppCompatActivity {
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
     private static final int REQUEST_CODE_CHEAT = 0;
+    private static int numCheatTries = 3;
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -77,10 +78,20 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start CheatActivity
-                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-                Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
 
-                startActivityForResult(intent, REQUEST_CODE_CHEAT);
+                if (numCheatTries > 0) {
+                    numCheatTries--;
+
+                    boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                    Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+
+                    startActivityForResult(intent, REQUEST_CODE_CHEAT);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "you only get 3 tries", Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         });
 
